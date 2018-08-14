@@ -16,7 +16,10 @@ app.use(fileUpload()); //se puede tener mas configuraciones
 app.put('/upload/:tipo/:id', function(req, res) {
 
     let tipo = req.params.tipo; ////USER O PRODUCTO
+
+    // console.log(tipo);
     let id = req.params.id; ////ID DE QUE LO SUBE
+    console.log(req.files);
     if (!req.files) {
         return res.status(400).json({
             ok: false,
@@ -40,7 +43,9 @@ app.put('/upload/:tipo/:id', function(req, res) {
     // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
     let fotoPerfil = req.files.archivo; //////el ultimo punto es como lo va a leer el servidor el nombre de la imagen o daro
     // Use the mv() method to place the file somewhere on your server
+    console.log(fotoPerfil);
 
+    console.log('aquiiiiiiiiiiiiiiiii');
 
     let extencionesValidas = ['png', 'jpg', 'gif', 'jpeg']; ///las extenciones que permitiremos
 
@@ -124,7 +129,7 @@ function ImagenUsuario(id, res, nombreArchivo) { ///////////////////metodo image
                 });
 
             }
-            res.json({
+            res.status(200).json({
                 ok: true,
                 usuario: usuarioGuardado,
                 img: nombreArchivo
@@ -179,7 +184,7 @@ function ImagenProducto(id, res, nombreArchivo) {
                 });
 
             }
-            res.json({
+            res.status(200).json({
                 ok: true,
                 producto: productoGuardado,
                 img: nombreArchivo

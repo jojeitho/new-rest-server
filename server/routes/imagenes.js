@@ -10,7 +10,7 @@ let app = express();
 
 
 
-app.get('/imagen/:tipo/:img', verificarTokenImagen, (req, res) => {
+app.get('/imagen/:tipo/:img', (req, res) => {
 
     let tipo = req.params.tipo;
     let img = req.params.img;

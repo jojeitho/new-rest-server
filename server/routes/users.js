@@ -100,27 +100,36 @@ app.get('/usuario', verificarToken, function(req, res) {
 app.put('/usuario/:id', [verificarToken, verificarUSER_ROLE], function(req, res) {
 
     let id = req.params.id;
-
-    let resid = req.body.plataform;
-    let plataform = "";
-
-    for (let i = 0; i <= resid.length; i++) {
-        if (resid = "") {
-            plataform = plataform + resid[i];
-
-        }
-
-
-    }
+    let plataform = req.body.plataform;
 
 
 
+
+    // let origin;
+
+    // for(var i = 0;i<=7;i++){
+
+    //     if(plataform[i]===","){
+
+    //     }else{
+    //         origin= origin + plataform[i];
+
+    //     }
+
+    // }
     console.log(plataform);
 
-    console.log(plataform);
 
 
-    let body = _.pick(req.body, ['name', 'img', 'plataform', 'birthday']);
+
+
+
+
+
+
+    let body = _.pick(req.body, ['name', 'birthday']);
+
+    body = { name: body.name, birthday: body.birthday, plataform }
 
     console.log(body);
 
@@ -145,53 +154,7 @@ app.put('/usuario/:id', [verificarToken, verificarUSER_ROLE], function(req, res)
 
 
 });
-app.put('/admin/:id', [verificarToken, verificarUSER_ROLE2], function(req, res) {
 
-    let id = req.params.id;
-
-    while (true) {
-        if (body.plataform[sum] != null) {
-
-            if (sum === 0) {
-                plataformaa = plataformaa + body.plataform[sum];
-                if (plataformaa[sum] = ',') {
-
-                } else {
-                    sum++;
-                }
-
-            } else {
-                plataformaa = plataformaa + `-` + body.plataform[sum];
-                sum++;
-            }
-
-        } else {
-            break;
-        }
-
-    }
-
-    let body = _.pick(req.body, ['name', 'img', plataforma, 'birthday']); /////MODIFICAR USUARIOS UNICAMENTE
-
-    console.log(body);
-    Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => { ///en el new true regresa el objeto actualizado si se lo quitamos regresa el anterior
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-
-        res.json({
-            ok: true,
-
-            usuario: usuarioDB
-        })
-
-
-    })
-
-});
 
 app.delete('/usuario/:id', [verificarToken, verificarUSER_ROLE], function(req, res) {
 
