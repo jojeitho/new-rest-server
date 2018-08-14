@@ -102,34 +102,24 @@ app.put('/usuario/:id', [verificarToken, verificarUSER_ROLE], function(req, res)
     let id = req.params.id;
     let plataform = req.body.plataform;
 
-
-
-
-    // let origin;
-
-    // for(var i = 0;i<=7;i++){
-
-    //     if(plataform[i]===","){
-
-    //     }else{
-    //         origin= origin + plataform[i];
-
-    //     }
-
-    // }
     console.log(plataform);
 
+    let origin = "";
 
+    for (var i = 0; i <= 3; i++) {
+        console.log(plataform[i]);
 
+        if (!plataform[i]) {
 
+        } else {
+            origin = origin + plataform[i];
 
+        }
 
-
-
-
+    }
     let body = _.pick(req.body, ['name', 'birthday']);
 
-    body = { name: body.name, birthday: body.birthday, plataform }
+    body = { name: body.name, birthday: body.birthday, plataform: origin }
 
     console.log(body);
 
