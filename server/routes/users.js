@@ -8,24 +8,20 @@ const app = express();
 
 app.post('/usuario', [verificarToken, verificarUSER_ROLE], function(req, res) { ////los verifica comprueban si el token es correcto y que el usuario sea admin
     let body = req.body;
-    let sum = 0;
-    let plataformaa = "[";
+    let plataform = req.body.plataform;
 
-    while (true) {
-        if (body.plataform[sum] != null) {
+    console.log(plataform);
 
-            if (sum === 0) {
-                plataformaa = plataformaa + body.plataform[sum];
-                sum++;
+    let origin = "";
 
-            } else {
-                plataformaa = plataformaa + body.plataform[sum];
-                sum++;
-            }
+    for (var i = 0; i <= 3; i++) {
+        console.log(plataform[i]);
+
+        if (!plataform[i]) {
 
         } else {
-            plataformaa = plataformaa + `]`;
-            break;
+            origin = origin + plataform[i];
+
         }
 
     }
@@ -37,7 +33,7 @@ app.post('/usuario', [verificarToken, verificarUSER_ROLE], function(req, res) { 
         email: body.email,
         password: bcrypt.hashSync(body.password, 10),
         birthday: body.birthday,
-        plataform: plataformaa,
+        plataform: origin,
         status: body.status,
         role: body.role,
         img: body.files
@@ -97,7 +93,7 @@ app.get('/usuario', verificarToken, function(req, res) {
 });
 
 
-app.put('/usuario/:id', [verificarToken, verificarUSER_ROLE], function(req, res) {
+app.put('/usuario/:id', verificarToken, function(req, res) {
 
     let id = req.params.id;
     let plataform = req.body.plataform;

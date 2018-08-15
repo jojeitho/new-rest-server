@@ -50,28 +50,6 @@ let verificarUSER_ROLE = (req, res, next) => {
 
 };
 
-let verificarUSER_ROLE2 = (req, res, next) => {
-    console.log('tas aqui');
-    let usuario = req.usuario;
-
-
-    if (usuario.role === 'USER') {
-        next();
-        return;
-
-    } else {
-        return res.json({
-            ok: false,
-            err: {
-                message: 'El usuario no es administrador'
-            }
-        });
-
-    }
-
-
-};
-
 //=======================
 ///verificar rol
 ///===================
@@ -98,6 +76,5 @@ let verificarTokenImagen = (req, res, next) => {
 module.exports = {
     verificarToken,
     verificarUSER_ROLE,
-    verificarUSER_ROLE2,
     verificarTokenImagen
 }
