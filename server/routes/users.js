@@ -92,6 +92,46 @@ app.get('/usuario', verificarToken, function(req, res) {
         })
 });
 
+app.get('/plataform/:plataform', function(req, res) {
+
+    // let desde = req.query.desde || 0; ////desde que registros va a empezar a cotar
+    // desde = Number(desde);
+
+    // let limite = req.query.limite || 5; /////cuantos registros me va a mostrar
+    // limite = Number(limite);
+    let plat=req.params.plataform;
+    let exreg = new RegExp(plat, 'i');
+
+    Usuario.find({ plataform: exreg }, 'name fnac plataform img')
+        // .skip(desde)
+        // .limit(limite)
+        .exec((err, usuarios) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            if(usuarios.length===0){
+                return res.status(400).json({
+                    ok: false,
+                    err: "no existe usuarios"
+                });
+
+            }
+
+            Usuario.count({ status: true }, (err, conteo) => {
+                res.json({
+                    count: conteo,
+                    ok: true,
+                    usuarios
+                });
+
+            })
+
+
+        })
+});
 
 app.put('/usuario/:id', verificarToken, function(req, res) {
 
