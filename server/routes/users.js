@@ -35,8 +35,7 @@ app.post('/usuario', [verificarToken, verificarUSER_ROLE], function(req, res) { 
         birthday: body.birthday,
         plataform: origin,
         status: body.status,
-        role: body.role,
-        img: body.files
+        role: body.role
     });
 
     usuario.save((err, usuarioDB) => {
@@ -99,7 +98,7 @@ app.get('/plataform/:plataform', function(req, res) {
 
     // let limite = req.query.limite || 5; /////cuantos registros me va a mostrar
     // limite = Number(limite);
-    let plat=req.params.plataform;
+    let plat = req.params.plataform;
     let exreg = new RegExp(plat, 'i');
 
     Usuario.find({ plataform: exreg }, 'name fnac plataform img')
@@ -112,7 +111,7 @@ app.get('/plataform/:plataform', function(req, res) {
                     err
                 });
             }
-            if(usuarios.length===0){
+            if (usuarios.length === 0) {
                 return res.status(400).json({
                     ok: false,
                     err: "no existe usuarios"

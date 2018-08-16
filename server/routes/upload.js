@@ -13,13 +13,12 @@ const path = require('path'); ///PATH
 // default options
 app.use(fileUpload()); //se puede tener mas configuraciones
 
-app.put('/upload/:tipo/:id', function(req, res) {
+app.post('/upload/:tipo/:id', function(req, res) {
 
     let tipo = req.params.tipo; ////USER O PRODUCTO
 
-    // console.log(tipo);
+    console.log(req);
     let id = req.params.id; ////ID DE QUE LO SUBE
-    console.log(req.files);
     if (!req.files) {
         return res.status(400).json({
             ok: false,
@@ -69,7 +68,7 @@ app.put('/upload/:tipo/:id', function(req, res) {
 
     fotoPerfil.mv(`uploads/${tipo}/${nombreArchivo}`, (err) => { //ruta donde guardaremos el archivo
         if (err)
-            return res.status(500).json({
+            return res.status(400).json({
 
                 ok: false,
                 err
@@ -88,15 +87,21 @@ app.put('/upload/:tipo/:id', function(req, res) {
     });
 });
 
+app.get('/delete/usuarios/:id', function(req, res) {
+
+    let nombre = null;
+    let id = req.params.id;
+    ImagenUsuario(id, res, nombre);
+
+});
+
 function ImagenUsuario(id, res, nombreArchivo) { ///////////////////metodo imagen usuario
 
     Usuario.findById(id, (err, usuarioDB) => {
 
 
         if (err) {
-
-            borarImagen(nombreArchivo, 'usuarios'); ///borrar la imagn subida para que nose guarde en cache 
-            return res.status(500).json({
+            return res.status(200).json({
                 ok: false,
                 err
 
@@ -106,7 +111,6 @@ function ImagenUsuario(id, res, nombreArchivo) { ///////////////////metodo image
 
         if (!usuarioDB) {
 
-            borarImagen(nombreArchivo, 'usuarios'); ///borrar la imagn subida para que nose guarde en cache 
             return res.status(400).json({
                 ok: false,
                 err: {
@@ -122,17 +126,14 @@ function ImagenUsuario(id, res, nombreArchivo) { ///////////////////metodo image
         usuarioDB.img = nombreArchivo; //////////////////////////AQUI VERIFICAMOS EL NOMBRE DEL IMG DE LA BD POR EL NOMBRE DEL ARCHIVO
         usuarioDB.save((err, usuarioGuardado) => {
             if (err) {
-                return res.status(500).json({
-                    ok: false,
+                return res.status(400).json({
                     err
 
                 });
 
             }
             res.status(200).json({
-                ok: true,
-                usuario: usuarioGuardado,
-                img: nombreArchivo
+                usuario: usuarioGuardado
             })
 
         })
@@ -151,7 +152,7 @@ function ImagenProducto(id, res, nombreArchivo) {
         if (err) {
 
             borarImagen(nombreArchivo, 'productos'); ///borrar la imagn subida para que nose guarde en cache 
-            return res.status(500).json({
+            return res.status(400).json({
                 ok: false,
                 err
 
@@ -177,7 +178,7 @@ function ImagenProducto(id, res, nombreArchivo) {
         productoDB.img = nombreArchivo; //////////////////////////AQUI VERIFICAMOS EL NOMBRE DEL IMG DE LA BD POR EL NOMBRE DEL ARCHIVO
         productoDB.save((err, productoGuardado) => {
             if (err) {
-                return res.status(500).json({
+                return res.status(200).json({
                     ok: false,
                     err
 
@@ -186,8 +187,7 @@ function ImagenProducto(id, res, nombreArchivo) {
             }
             res.status(200).json({
                 ok: true,
-                producto: productoGuardado,
-                img: nombreArchivo
+                producto: productoGuardado
             })
 
         })

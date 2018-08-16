@@ -24,7 +24,6 @@ app.post('/login', (req, res) => {
         if (!usuarioDB) {
             console.log(body.email);
             return res.status(400).json({
-                ok: false,
                 err: {
                     message: 'usuariopoo o contraseña incorrectos'
                 }
@@ -33,7 +32,6 @@ app.post('/login', (req, res) => {
         }
         if (!bcrypt.compareSync(body.password, usuarioDB.password)) {
             return res.status(400).json({
-                ok: false,
                 err: {
                     message: 'usuario o contraseñahhh incorrectos'
                 }
@@ -44,8 +42,7 @@ app.post('/login', (req, res) => {
         }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
 
         res.status(200).json({
-            ok: true,
-            usuarioDB, ////SI TODO SALIO BIEN ENTONCES IMPRIMIMOS EL USUARIO COMPLETO MAS EL TOKEN
+            usuario: usuarioDB, ////SI TODO SALIO BIEN ENTONCES IMPRIMIMOS EL USUARIO COMPLETO MAS EL TOKEN
             token
         });
     });
@@ -77,7 +74,6 @@ app.post('/google', async(req, res) => {
     let google_user = await verify(token)
         .catch(e => {
             return res.status(403).json({
-                ok: false,
                 err: e
             });
         });
@@ -85,7 +81,6 @@ app.post('/google', async(req, res) => {
     Usuario.findOne({ email: google_user.email }, (err, usuarioDB) => {
         if (err) {
             return res.status(500).json({
-                ok: false,
                 err
             });
         };
@@ -93,7 +88,6 @@ app.post('/google', async(req, res) => {
         if (usuarioDB) {
             if (usuarioDB.google === false) {
                 return res.status(400).json({
-                    ok: false,
                     err: {
                         message: 'usuario autenticado sin google'
                     }
@@ -105,7 +99,6 @@ app.post('/google', async(req, res) => {
                 }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
 
                 return res.json({
-                    ok: true,
                     usuario: usuarioDB,
                     token
                 });
@@ -127,7 +120,7 @@ app.post('/google', async(req, res) => {
             usuario.save((err, usuarioDB) => {
                 if (err) {
                     return res.status(500).json({
-                        ok: false,
+
                         err
                     });
                 }
@@ -137,7 +130,6 @@ app.post('/google', async(req, res) => {
                 }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
 
                 return res.json({
-                    ok: true,
                     usuario: usuarioDB,
                     token
                 });

@@ -15,10 +15,14 @@ app.use((req, res, next) => {
 const bodyParser = require('body-parser');
 
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
 
+
+
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({ limit: '50mb' }));
 // parse application/json
-app.use(bodyParser.json());
 
 //////habilitar el loggin y la carpeta 
 console.log(path.resolve(__dirname, '../public'));
