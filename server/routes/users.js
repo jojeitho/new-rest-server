@@ -121,9 +121,7 @@ app.get('/plataform/:plataform', function(req, res) {
 
             Usuario.count({ status: true }, (err, conteo) => {
                 res.json({
-                    count: conteo,
-                    ok: true,
-                    usuarios
+                    usuarios: usuarios
                 });
 
             })
@@ -161,15 +159,12 @@ app.put('/usuario/:id', verificarToken, function(req, res) {
     Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => { ///en el new true regresa el objeto actualizado si se lo quitamos regresa el anterior
         if (err) {
             return res.status(400).json({
-                ok: false,
                 err
             });
         }
 
         res.json({
-            ok: true,
-
-            usuarioDB
+            usuario: usuarioDB
 
 
         });
