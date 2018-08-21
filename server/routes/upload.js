@@ -17,7 +17,6 @@ app.post('/upload/:tipo/:id', function(req, res) {
 
     let tipo = req.params.tipo; ////USER O PRODUCTO
 
-    console.log(req);
     let id = req.params.id; ////ID DE QUE LO SUBE
     if (!req.files) {
         return res.status(400).json({
@@ -42,9 +41,7 @@ app.post('/upload/:tipo/:id', function(req, res) {
     // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
     let fotoPerfil = req.files.archivo; //////el ultimo punto es como lo va a leer el servidor el nombre de la imagen o daro
     // Use the mv() method to place the file somewhere on your server
-    console.log(fotoPerfil);
 
-    console.log('aquiiiiiiiiiiiiiiiii');
 
     let extencionesValidas = ['png', 'jpg', 'gif', 'jpeg']; ///las extenciones que permitiremos
 

@@ -70,15 +70,14 @@ app.get('/categoria/:id', verificarToken, (req, res) => {
 ////===================
 
 app.post('/categoria', verificarToken, function(req, res) {
-    // req.usuario._id
+
     let body = req.body;
 
     let categoria = new Categoria({
         descripcion: body.categoria,
         usuario: req.usuario._id
     });
-    console.log('tas aqui');
-    console.log(categoria);
+
     categoria.save((err, categoriaDB) => {
 
         console.log(categoriaDB);

@@ -14,13 +14,12 @@ app.post('/usuario', [verificarToken, verificarUSER_ROLE], function(req, res) { 
 
     let origin = "";
 
-    for (var i = 0; i <= 3; i++) {
-        console.log(plataform[i]);
+    for (var plataformaUser = 0; plataformaUser <= 3; plataformaUser++) {
 
-        if (!plataform[i]) {
+        if (!plataform[plataformaUser]) {
 
         } else {
-            origin = origin + plataform[i];
+            origin = origin + plataform[plataformaUser];
 
         }
 
@@ -35,7 +34,8 @@ app.post('/usuario', [verificarToken, verificarUSER_ROLE], function(req, res) { 
         birthday: body.birthday,
         plataform: origin,
         status: body.status,
-        role: body.role
+        role: body.role,
+        tipo: body.tipo
     });
 
     usuario.save((err, usuarioDB) => {
@@ -83,6 +83,45 @@ app.get('/usuario', verificarToken, function(req, res) {
                     count: conteo,
                     ok: true,
                     usuarios
+                });
+
+            })
+
+
+        })
+});
+app.get('/tipo/:tipo', function(req, res) {
+
+    // let desde = req.query.desde || 0; ////desde que registros va a empezar a cotar
+    // desde = Number(desde);
+
+    // let limite = req.query.limite || 5; /////cuantos registros me va a mostrar
+    // limite = Number(limite);
+    let plat = req.params.tipo;
+    let exreg = new RegExp(plat, 'i');
+
+    Usuario.find({ tipo: exreg }, 'name plataform img')
+        // .skip(desde)
+        // .limit(limite)
+        .exec((err, tipo) => {
+            if (err) {
+                return res.status(400).json({
+                    ok: false,
+                    err
+                });
+            }
+            if (tipo.length === 0) {
+                return res.status(400).json({
+                    ok: false,
+                    err: "no existe tipo"
+                });
+
+            }
+
+            Usuario.count({ status: true }, (err, conteo) => {
+                res.json({
+                    ok: true,
+                    tipo: tipo
                 });
 
             })

@@ -1,37 +1,27 @@
-///////////
-/////
-//////// PUERTO
-//////
-//////
+/*_________________________
+      PUERTO
+________________________*/
 
 process.env.PORT = process.env.PORT || 3000;
-
-
-
-/////
-//////// entorno de programacion local o nuve
-//////
-//////
-
+/*_________________________
+entorno de programacion local o nuve
+________________________*/
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
-/////
-//////// caducidad TOKEN
-//////
-//////
+/*_________________________
+    caducidad del token
+________________________*/
 process.env.CAD_TOKEN = "7d";
-/////
-//////// SEMILLA DEL TOKEN
-//////
-//////
+
+/*_________________________
+     semilla del token
+________________________*/
 
 process.env.SEED = process.env.SEED || 'jojeitho';
 
-/////
-//////// entorno de base de datos
-//////
-//////
-
+/* _________________________
+        entorno DB
+________________________*/
 
 let urlDB;
 
@@ -43,12 +33,8 @@ if (process.env.NODE_ENV === 'dev') {
 
 process.env.URL_DB = urlDB;
 
-
-/////
-/////
-////GOOGLE CLIENT ID
-//////
-//////
-
+/*_________________________
+      GOOGLE CLIENT ID
+_________________________*/
 
 process.env.CLIENT_ID = process.env.CLIENT_ID || '1013797591310-4gkshed9vilbvg62hudccqakkpf9d7hl.apps.googleusercontent.com';

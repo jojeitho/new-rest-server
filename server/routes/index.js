@@ -8,4 +8,5 @@ app.use(require('./producto'))
 app.use(require('./upload'))
 app.use(require('./imagenes'))
 app.use(require('./states'))
+app.use(require('./projects'))
 module.exports = app;

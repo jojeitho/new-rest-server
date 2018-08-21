@@ -43,13 +43,16 @@ let usuarioSchema = new Schema({
     status: {
         type: Boolean,
         default: true
+    },
+    tipo: {
+        type: String
     }
 });
 
 
 usuarioSchema.methods.toJSON = function() {
     let user = this;
-    let userObject = user.toObject(); //////retorna el nuevo objeto para no mostrar el oasword a terceros solo se mantiene en el servidor
+    let userObject = user.toObject(); //////retorna el nuevo objeto para no mostrar el Password a terceros solo se mantiene en el servidor
     delete userObject.password;
 
     return userObject;

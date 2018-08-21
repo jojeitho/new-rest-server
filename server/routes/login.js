@@ -25,7 +25,7 @@ app.post('/login', (req, res) => {
             console.log(body.email);
             return res.status(400).json({
                 err: {
-                    message: 'usuariopoo o contraseña incorrectos'
+                    message: 'User or Password Incorrect'
                 }
             });
 
@@ -33,7 +33,7 @@ app.post('/login', (req, res) => {
         if (!bcrypt.compareSync(body.password, usuarioDB.password)) {
             return res.status(400).json({
                 err: {
-                    message: 'usuario o contraseñahhh incorrectos'
+                    message: 'User or Password Incorrect'
                 }
             });
         }
@@ -42,107 +42,11 @@ app.post('/login', (req, res) => {
         }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
 
         res.status(200).json({
-            usuario: usuarioDB, ////SI TODO SALIO BIEN ENTONCES IMPRIMIMOS EL USUARIO COMPLETO MAS EL TOKEN
+            usuario: usuarioDB, ////SI TODO SALIO BIEN ENTONCES IMPRIMIMOS EL USUARIO COMPLETO MAS EL TOKEN OPCIONAL
             token
         });
     });
 });
-
-
-////configuraciones de google
-async function verify(token) {
-    const ticket = await client.verifyIdToken({
-        idToken: token,
-        audience: process.env.CLIENT_ID, // Specify the CLIENT_ID of the app that accesses the backend
-        // Or, if multiple clients access the backend:
-        //[CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]
-    });
-    const payload = ticket.getPayload();
-    return {
-        name: payload.name,
-        img: payload.picture,
-        email: payload.email,
-        google: true,
-        fnac: '0-0-0'
-    }
-} //verify().catch(console.error);
-
-app.post('/google', async(req, res) => {
-
-    let token = req.body.idtoken;
-
-    let google_user = await verify(token)
-        .catch(e => {
-            return res.status(403).json({
-                err: e
-            });
-        });
-
-    Usuario.findOne({ email: google_user.email }, (err, usuarioDB) => {
-        if (err) {
-            return res.status(500).json({
-                err
-            });
-        };
-
-        if (usuarioDB) {
-            if (usuarioDB.google === false) {
-                return res.status(400).json({
-                    err: {
-                        message: 'usuario autenticado sin google'
-                    }
-                });
-
-            } else {
-                let token = jwt.sign({
-                    usuario: usuarioDB ///////CONVERTIMOS EL RESULTAOD EN TOKEN CON LA SEMILLA CREADA EN HEROKU Y LA FECHA DE EXPIRACCION
-                }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
-
-                return res.json({
-                    usuario: usuarioDB,
-                    token
-                });
-
-            }
-        } else {
-            //si el usuarui no existe en la bd
-            let usuario = new Usuario();
-
-            usuario.name = google_user.name;
-            usuario.email = google_user.email;
-            usuario.img = google_user.img;
-            usuario.google = true;
-            usuario.password = 'google';
-            usuario.fnac = '0-0-0';
-            usuario.plataform = 'default';
-            usuario.status = true;
-
-            usuario.save((err, usuarioDB) => {
-                if (err) {
-                    return res.status(500).json({
-
-                        err
-                    });
-                }
-
-                let token = jwt.sign({
-                    usuario: usuarioDB ///////CONVERTIMOS EL RESULTAOD EN TOKEN CON LA SEMILLA CREADA EN HEROKU Y LA FECHA DE EXPIRACCION
-                }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
-
-                return res.json({
-                    usuario: usuarioDB,
-                    token
-                });
-
-            })
-
-        }
-
-
-
-    });
-});
-
 
 
 module.exports = app;
