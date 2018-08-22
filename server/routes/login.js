@@ -1,9 +1,5 @@
 const express = require('express');
 
-//2do post 
-const { OAuth2Client } = require('google-auth-library');
-const client = new OAuth2Client(process.env.CLIENT_ID);
-
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/usuario');
@@ -37,14 +33,39 @@ app.post('/login', (req, res) => {
                 }
             });
         }
-        let token = jwt.sign({
-            usuario: usuarioDB ///////CONVERTIMOS EL RESULTAOD EN TOKEN CON LA SEMILLA CREADA EN HEROKU Y LA FECHA DE EXPIRACCION
-        }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
 
-        res.status(200).json({
-            usuario: usuarioDB, ////SI TODO SALIO BIEN ENTONCES IMPRIMIMOS EL USUARIO COMPLETO MAS EL TOKEN OPCIONAL
-            token
+        console.log(usuarioDB.token);
+
+        let userToken = new Usuario({ //campos del objeto sin el token para que no se vuelva a convertir
+            name: usuarioDB.name,
+            email: usuarioDB.email,
+            password: usuarioDB.password,
+            birthday: usuarioDB.birthday,
+            plataform: usuarioDB.plataform,
+            status: usuarioDB.status,
+            role: usuarioDB.role,
+            tipo: usuarioDB.tipo
         });
+        console.log(userToken);
+        let token = jwt.sign({
+            usuario: userToken ///////CONVERTIMOS EL RESULTAOD EN TOKEN CON LA SEMILLA CREADA EN HEROKU Y LA FECHA DE EXPIRACCION
+        }, process.env.SEED, { expiresIn: process.env.CAD_TOKEN });
+        usuarioDB.token = token;
+        console.log(token);
+
+        Usuario.findByIdAndUpdate(usuarioDB.id, usuarioDB, { new: true }, (err, user) => { ///en el new true regresa el objeto actualizado si se lo quitamos regresa el anterior
+            if (err) {
+                return res.status(400).json({
+                    err
+                });
+            }
+
+            res.status(200).json({
+                usuario: user ////SI TODO SALIO BIEN ENTONCES IMPRIMIMOS EL USUARIO COMPLETO MAS EL TOKEN OPCIONAL
+            });
+
+        });
+
     });
 });
 

@@ -46,6 +46,9 @@ let usuarioSchema = new Schema({
     },
     tipo: {
         type: String
+    },
+    token: {
+        type: String
     }
 });
 
